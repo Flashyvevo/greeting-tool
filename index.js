@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const db = require('./db');
 const usersRoute = require('./routes/users');
+const analyticsRoute = require('./routes/analytics');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,18 @@ app.set('views', path.join(__dirname, 'views'));
 
 // API routes
 app.use('/api/users', usersRoute);
+app.use('/api/analytics', analyticsRoute);
+
+// Analytics page
+app.get('/analytics', (req, res) => {
+  const analytics = require('./models/analytics');
+  res.render('analytics', {
+    totalUsers: analytics.getTotalUsers(),
+    newUsersToday: analytics.getNewUsersToday(),
+    signupsByDay: analytics.getSignupsByDay(),
+    recentUsers: analytics.getRecentUsers(),
+  });
+});
 
 // Dashboard route
 app.get('/dashboard', (req, res) => {
