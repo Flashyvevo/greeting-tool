@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #1a1a2e;
+      color: #fff;
+      padding: 20px 0;
+      flex-shrink: 0;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.2rem;
+    }
+    .sidebar nav a {
+      display: block;
+      padding: 12px 24px;
+      color: #ccc;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background: #16213e;
+      color: #fff;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      padding: 30px;
+      background: #f4f4f8;
+    }
+    .main h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h3 { margin-bottom: 8px; color: #555; }
+    .card p { font-size: 1.8rem; font-weight: bold; color: #1a1a2e; }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <h2>Greeting Tool</h2>
+    <nav>
+      <a href="/dashboard" class="active">Dashboard</a>
+      <a href="/api/users">Users</a>
+      <a href="#">Settings</a>
+      <a href="#">Reports</a>
+      <a href="#">Help</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main">
+    <h1>Welcome, <%= greeting %> </h1>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Total Users</h3>
+        <p><%= userCount %></p>
+      </div>
+      <div class="card">
+        <h3>Node Version</h3>
+        <p><%= nodeVersion %></p>
+      </div>
+      <div class="card">
+        <h3>Current Time</h3>
+        <p><%= currentTime %></p>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
