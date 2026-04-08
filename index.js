@@ -9,8 +9,9 @@ const analyticsRoute = require('./routes/analytics');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Parse JSON request bodies
+// Parse request bodies
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // Set up EJS
 app.set('view engine', 'ejs');
@@ -29,6 +30,33 @@ app.get('/analytics', (req, res) => {
     signupsByDay: analytics.getSignupsByDay(),
     recentUsers: analytics.getRecentUsers(),
   });
+});
+
+// Users page
+app.get('/users', (req, res) => {
+  const users = db.prepare('SELECT * FROM users ORDER BY created_at DESC').all();
+  res.render('users', { users, message: null, messageType: null });
+});
+
+app.post('/users', (req, res) => {
+  const { name, email } = req.body;
+  const validateEmail = require('./utils/validateEmail');
+  const users = db.prepare('SELECT * FROM users ORDER BY created_at DESC').all();
+
+  if (!name || !name.trim() || !email || !validateEmail(email)) {
+    return res.render('users', { users, message: 'Please provide a valid name and email.', messageType: 'error' });
+  }
+
+  try {
+    db.prepare('INSERT INTO users (name, email) VALUES (?, ?)').run(name.trim(), email.trim());
+    const updated = db.prepare('SELECT * FROM users ORDER BY created_at DESC').all();
+    res.render('users', { users: updated, message: `${name.trim()} added successfully.`, messageType: 'success' });
+  } catch (err) {
+    if (err.message.includes('UNIQUE constraint failed')) {
+      return res.render('users', { users, message: 'A user with that email already exists.', messageType: 'error' });
+    }
+    res.render('users', { users, message: 'Failed to add user.', messageType: 'error' });
+  }
 });
 
 // Dashboard route
