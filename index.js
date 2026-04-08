@@ -44,6 +44,15 @@ app.get('/dashboard', (req, res) => {
   });
 });
 
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    uptime: process.uptime(),
+    timestamp: new Date(),
+  });
+});
+
 // Root redirect
 app.get('/', (req, res) => {
   res.redirect('/dashboard');
